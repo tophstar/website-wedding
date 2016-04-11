@@ -1,0 +1,21 @@
+<!-- application/layouts/scripts/layout.phtml -->
+    <?php echo $this->doctype() ?>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>Leslie and Christopher</title>
+
+
+      <?php //echo $this->headLink()->appendStylesheet('/css/global.css') ?>
+      
+      	<script>window.jQuery 	 || document.write('<script src="_zf/js/libs/jquery-1.10.2.min.js"><\/script>')</script>
+      	<script>window.jQuery.ui || document.write('<script src="_zf/js/libs/jquery-ui/jquery-ui-1.10.3.min.js"><\/script>')</script>
+
+
+    </head>
+    <body>
+    
+    <?php echo $this->layout()->content ?>
+     
+    </body>
+    </html>

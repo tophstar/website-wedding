@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <!--
+    Modified from the Debian original for Ubuntu
+    Last updated: 2014-03-19
+    See: https://launchpad.net/bugs/1288690
+  -->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Apache2 Ubuntu Default Page: It works</title>
+    <style type="text/css" media="screen">
+      body {
+        margin:0;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="terminal.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="terminal.js"></script>
+    <script type="text/javascript">
+    var state = false,
+        loggedIn = false,
+        help = "Invalid Command",
+        weddingInfo = "The wedding ceremony will be held at the Eugene Zendo.\n"
+                +"The reception will be help at Sweet Cheeks Weinery\n"
+        baseCommands = "To proceed, type in one of the following commands and then press enter.\r\n"
+                + "- RSVP     - This is how you will rsvp for the wedding and reception.\n"
+                + "- Location - Information about the location.\n"
+                + "- Registry - This is Christopher and Leslie's wedding registry."
+
+
+    jQuery(function($, undefined) {
+        $('#term_demo').terminal(function(command, term) {
+
+            console.log(command);
+
+            if (!loggedIn) {
+              loggedIn = true;
+              term.echo("Thank You.\n"
+                + baseCommands);
+              return;
+            } 
+
+            if(loggedIn && !state){
+              if(command.toUpperCase() === 'RSVP') {
+                state = 'rsvp'
+                term.echo(weddingInfo
+                  + "Would you like to register for the ceremony?"
+                  );
+              }
+              else if(command.toUpperCase() === "LOCATION"){
+                state = 'location'
+                term.echo(weddingInfo);
+              }
+              else if(command.toUpperCase === "REGISTRY"){
+                term.echo("Place Holder");
+              }
+              else {
+                term.echo(help);
+              }
+              return;
+            }
+
+            console.log(state);
+
+            if(state === 'rsvp'){
+
+              if(command.toUpperCase() === 'HELP' || command === ''){
+                term.echo('Type in "y" or "yes" to register for the ceremony.  Otherwise, type in "n" or "no", or type in "exit" to decide later.');
+              }
+
+              state = 'reception'
+
+              if(command.match(/^(y|yes)$/i)){
+                term.echo('You are registered for the ceremony.');
+              }
+
+              term.echo('Would you like to register for the reception?');
+              return;
+            }
+
+            if(state === 'reception'){
+              if(command.toUpperCase() === 'HELP' || command === ''){
+                term.echo('Type in "y" or "yes" to register for the reception.  Otherwise, type in "n" or "no", or type in "exit" to decide later.');
+              }
+
+              state = false;
+
+              if(command.match(/^(y|yes)$/i)){
+                term.echo("You are registered for the reception.");
+
+                return;
+              }
+
+            }
+
+            if(command === "exit"){
+              state = false;
+              return;
+            }
+
+            term.echo(help);
+        }, {
+            greetings: 'Wedding Terminal',
+            onInit: function (term) {
+              term.echo("Please type in your username and then press enter.\n"
+                +"(Your username is on your save the date card)");
+            },
+            name: 'js_demo',
+            height:'100vh',
+            prompt: '> '});
+    });
+    </script>
+  </head>
+  <body>
+    <div class="main_page">
+      <div id="term_demo" class="terminal"></div>
+    </div>
+  </body>
+</html>
+
